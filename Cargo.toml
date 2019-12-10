@@ -1,9 +1,13 @@
 [package]
 name = "solovay_strassen"
-version = "0.1.0"
+description = "A simple implementation of the Solovay-Strassen primality test."
+version = "0.1.1"
+
 authors = ["cjayross <calvinjayross@gmail.com>"]
 edition = "2018"
-description = "A simple implementation of the Solovay-Strassen primality test."
+
+repository = "https://github.com/cjayross/solovay_strassen"
+
 license = "MIT"
 keywords = ["solovay", "strassen", "prime", "primality", "test"]
 categories = ["cryptography", "mathematics"]
