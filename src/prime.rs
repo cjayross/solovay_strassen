@@ -47,6 +47,23 @@ fn legendre_symbol(mut a: u64, mut n: u64) -> i64 {
   }
 }
 
+/// Test whether an integer `a` is a witness for the compositeness of `n`.
+///
+/// # Examples
+///
+/// ```
+/// extern crate rand;
+/// use rand::distributions::{Distribution, Uniform};
+/// use solovay_strassen::prime;
+///
+/// let n: u64 = 27;
+/// let dist = Uniform::new(2, n);
+/// let mut rng = rand::thread_rng();
+/// // A random integer in [2..n]
+/// let a: u64 = dist.sample(&mut rng);
+/// let res: bool = prime::solovay_strassen(a, n);
+/// assert_eq!(res, true);
+/// ```
 pub fn solovay_strassen(a: u64, n: u64) -> bool {
   let x: i64 = legendre_symbol(a, n);
 
@@ -58,6 +75,20 @@ pub fn solovay_strassen(a: u64, n: u64) -> bool {
   }
 }
 
+/// Test whether an integer `n` is likely prime.
+///
+/// # Examples
+///
+/// ```
+/// use solovay_strassen::prime;
+///
+/// // Mersenne Prime (2^31 - 1)
+/// let n: u64 = 0x7FFF_FFFF;
+/// // Try the solovay-strassen test 100 times in parallel
+/// let res: bool = prime::is_prime(n, 100);
+/// // Fails with a probability of at most 2_f64.pow(-100_f64)
+/// assert_eq!(res, true);
+/// ```
 pub fn is_prime(n: u64, k: usize) -> bool {
   let dist = Uniform::new(2, n);
   let rng = rand::thread_rng();
