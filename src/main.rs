@@ -1,4 +1,3 @@
-#![allow(unused_variables, dead_code)]
 extern crate rand;
 extern crate rayon;
 extern crate clap;
