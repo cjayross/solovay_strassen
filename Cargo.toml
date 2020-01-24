@@ -1,7 +1,7 @@
 [package]
 name = "solovay_strassen"
 description = "A simple implementation of the Solovay-Strassen primality test."
-version = "0.1.3"
+version = "0.1.4"
 
 authors = ["cjayross <calvinjayross@gmail.com>"]
 edition = "2018"

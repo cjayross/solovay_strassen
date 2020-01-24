@@ -2,7 +2,8 @@
 //!
 //! # Quick Start
 //!
-//! Import the `prime` module, contained within are two functions:
+//! Contained within this module are two functions:
 //!   * solovay_strassen
 //!   * is_prime
-pub mod prime;
+mod prime;
+pub use prime::*;

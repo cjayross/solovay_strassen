@@ -56,14 +56,14 @@ fn legendre_symbol(mut a: u64, mut n: u64) -> i64 {
 /// ```
 /// extern crate rand;
 /// use rand::distributions::{Distribution, Uniform};
-/// use solovay_strassen::prime;
+/// use solovay_strassen::solovay_strassen;
 ///
 /// let n: u64 = 27;
 /// let dist = Uniform::new(2, n);
 /// let mut rng = rand::thread_rng();
 /// // A random integer in [2..n]
 /// let a: u64 = dist.sample(&mut rng);
-/// let res: bool = prime::solovay_strassen(a, n);
+/// let res: bool = solovay_strassen(a, n);
 /// assert_eq!(res, true);
 /// ```
 pub fn solovay_strassen(a: u64, n: u64) -> bool {
@@ -81,16 +81,21 @@ pub fn solovay_strassen(a: u64, n: u64) -> bool {
 /// # Examples
 ///
 /// ```
-/// use solovay_strassen::prime;
+/// use solovay_strassen::is_prime;
 ///
 /// // Mersenne Prime (2^31 - 1)
 /// let n: u64 = 0x7FFF_FFFF;
 /// // Try the solovay-strassen test 100 times in parallel
-/// let res: bool = prime::is_prime(n, 100);
+/// let res: bool = is_prime(n, 100);
 /// // Fails with a probability of at most 2_f64.pow(-100_f64)
 /// assert_eq!(res, true);
 /// ```
 pub fn is_prime(n: u64, k: usize) -> bool {
+    match n {
+        1 | 2 => return true,
+        _ => (),
+    }
+
     let dist = Uniform::new(2, n);
     let rng = rand::thread_rng();
     let samples: Vec<u64> = dist.sample_iter(rng).take(k).collect();
