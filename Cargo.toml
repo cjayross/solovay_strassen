@@ -1,7 +1,7 @@
 [package]
 name = "solovay_strassen"
 description = "A simple implementation of the Solovay-Strassen primality test."
-version = "0.1.4"
+version = "0.1.5"
 
 authors = ["cjayross <calvinjayross@gmail.com>"]
 edition = "2018"
@@ -13,5 +13,11 @@ keywords = ["solovay", "strassen", "prime", "primality", "test"]
 categories = ["cryptography", "mathematics"]
 
 [dependencies]
-rand = "~0.7.0"
-rayon = "~1.2.1"
+rayon = "1.2.1"
+rand = "0.5"
+num-traits = "0.2"
+num-integer = "0.1"
+
+[dependencies.num-bigint]
+version = "0.2"
+features = ["rand"]
