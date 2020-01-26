@@ -63,28 +63,36 @@ fn legendre_symbol(mut a: BigUint, mut n: BigUint) -> BigInt {
 
 fn __solovay_strassen(a: &BigUint, n: &BigUint) -> bool {
     let x: BigInt = legendre_symbol(a.clone(), n.clone());
+
     x == Zero::zero() || x.mod_floor(&bigint!(n)) != bigint!(a.modpow(&((n - 1u8) / 2u8), n))
 }
 
 /// Test whether an integer `a` is a witness for the compositeness of `n`.
+///
+/// NOTE: This function fails if `a < 2` or `n < 3`.
 ///
 /// # Examples
 ///
 /// ```
 /// extern crate rand;
 /// use rand::distributions::{Distribution, Uniform};
-/// use solovay_strassen::solovay_strassen;
+/// use solovay_strassen::is_witness;
 ///
 /// let n: u64 = 27;
 /// let dist = Uniform::new(2, n);
 /// let mut rng = rand::thread_rng();
 /// // A random integer in [2..n]
 /// let a: u64 = dist.sample(&mut rng);
-/// assert!(solovay_strassen(&a, &n));
+/// assert!(is_witness(&a, &n).unwrap());
 /// ```
-pub fn solovay_strassen<T: ToBigUint>(a: &T, n: &T) -> bool {
+pub fn is_witness<T: ToBigUint>(a: &T, n: &T) -> Option<bool> {
     let (ref a, ref n) = (biguint!(a), biguint!(n));
-    __solovay_strassen(a, n)
+
+    if a < &biguint!(2) || n < &biguint!(3) {
+        return None;
+    }
+
+    Some(__solovay_strassen(a, n))
 }
 
 /// Test whether an integer `n` is likely prime.
@@ -96,13 +104,16 @@ pub fn solovay_strassen<T: ToBigUint>(a: &T, n: &T) -> bool {
 ///
 /// // Mersenne Prime (2^31 - 1)
 /// let n: u64 = 0x7FFF_FFFF;
-/// // Try the solovay-strassen test 100 times in parallel
-/// // Fails with a probability of at most `2_f64.pow(-100_f64)`
+/// // Try the solovay-strassen test 100 times in parallel.
+/// // Fails with a probability of at most `2^{-k}`.
 /// assert!(is_prime(&n, 100));
 /// ```
 pub fn is_prime<T: ToBigUint>(n: &T, k: usize) -> bool {
     let n = biguint!(n);
-    if n < biguint!(3) {
+
+    if n == Zero::zero() {
+        return false;
+    } else if n < biguint!(3) {
         return true;
     }
 
@@ -112,15 +123,15 @@ pub fn is_prime<T: ToBigUint>(n: &T, k: usize) -> bool {
         .take(k)
         .collect();
 
-    !samples
+    samples
         .par_iter()
         .find_any(|&a| __solovay_strassen(a, &n))
-        .is_some()
+        .is_none()
 }
 
 #[cfg(test)]
 mod tests {
-    const K: usize = 1;
+    const K: usize = 100;
 
     use super::*;
     use std::io;
