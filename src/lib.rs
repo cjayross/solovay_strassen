@@ -1,10 +1,10 @@
 //! # Quick Start
 //!
 //! Contained within this module are two functions:
-//!   * `solovay_strassen`
+//!   * `is_witness`
 //!   * `is_prime`
 //!
-//! The function `solovay_strassen` performs a single iteration of the Solovay-Strassen
+//! The function `is_witness` performs a single iteration of the Solovay-Strassen
 //! primality test.
 //!
 //! On the other hand, `is_prime` is a routine that performs the Solovay-Strassen
