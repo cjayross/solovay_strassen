@@ -74,15 +74,10 @@ fn __solovay_strassen(a: &BigUint, n: &BigUint) -> bool {
 /// # Examples
 ///
 /// ```
-/// extern crate rand;
-/// use rand::distributions::{Distribution, Uniform};
 /// use solovay_strassen::is_witness;
 ///
 /// let n: u64 = 27;
-/// let dist = Uniform::new(2, n);
-/// let mut rng = rand::thread_rng();
-/// // A random integer in [2..n]
-/// let a: u64 = dist.sample(&mut rng);
+/// let a: u64 = 2;
 /// assert!(is_witness(&a, &n).unwrap());
 /// ```
 pub fn is_witness<T: ToBigUint>(a: &T, n: &T) -> Option<bool> {
@@ -111,9 +106,9 @@ pub fn is_witness<T: ToBigUint>(a: &T, n: &T) -> Option<bool> {
 pub fn is_prime<T: ToBigUint>(n: &T, k: usize) -> bool {
     let n = biguint!(n);
 
-    if n == Zero::zero() {
+    if n <= One::one() {
         return false;
-    } else if n < biguint!(3) {
+    } else if n <= biguint!(3) {
         return true;
     }
 
